@@ -1,22 +1,26 @@
-#include <string> 
-
+#include <string>
 #include "Graphic/SDL/RendererWrapper.h"
 #include "Graphic/Window.h"
 #include "Logger.h"
 #include "Exception/AppException.h"
 
 namespace MV {
+	//static uint8_t* audioPos = nullptr;
+	//static uint32_t audioRemainingLen = 0;
+	//static int isAudioPaused = 1;
+
 	RendererWrapper::RendererWrapper()
 	{
-		LOGGER_DEBUG("Creating SDL Window...");
-
+		LOGGER_DEBUG("Initializing SDL components...");
+		
+		// Video
 		m_StartTime = 0;
 		m_EndTime = 0;
 		m_Delta = 0;
 		m_TimePerFrameinMilliSec = 15;
 		m_Fps = 60;
 
-		if (SDL_Init(SDL_INIT_VIDEO) < 0) 
+		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
 		{
 			LOGGER_DEBUG("SDL could not initialize!");
 			throw AppException(SDL_GetError());
@@ -28,7 +32,7 @@ namespace MV {
 			SDL_WINDOWPOS_CENTERED,
 			WINDOW_WIDTH,
 			WINDOW_HEIGHT,
-			SDL_WINDOW_OPENGL
+			SDL_WINDOW_OPENGL | SDL_WINDOW_MOUSE_CAPTURE | SDL_WINDOW_RESIZABLE
 		);
 
 		if (m_Window == nullptr) 
@@ -43,6 +47,9 @@ namespace MV {
 			LOGGER_DEBUG("Renderer could not be created!");
 			throw AppException(SDL_GetError());
 		}
+
+		m_IsRunning = true;
+		LOGGER_DEBUG("Initialization of SDL components, done...");
 	}
 
 	RendererWrapper::~RendererWrapper()
@@ -88,5 +95,29 @@ namespace MV {
 
 		m_StartTime = m_EndTime;
 		m_EndTime = (uint32_t) SDL_GetTicks();
+	}
+
+	void RendererWrapper::CallPullEvents()
+	{
+		SDL_Event event;
+		while (SDL_PollEvent(&event)) {
+			if (!m_IsRunning || event.type == SDL_QUIT)
+			{
+				m_IsRunning = false;
+				break;
+			}
+
+			switch (event.type) {
+			case SDL_WINDOWEVENT:
+				if (event.window.event == SDL_WINDOWEVENT_CLOSE) m_IsRunning = false;
+				break;
+			default:
+				break;
+			}
+		}
+	}
+	bool RendererWrapper::CallIsRunning()
+	{
+		return m_IsRunning;
 	}
 }

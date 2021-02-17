@@ -39,11 +39,15 @@ file(GLOB SOURCES
 	"src/Exception/*.h"
 	"src/Graphic/*.h"
     "src/Graphic/SDL/*.h"
+    "src/Audio/*.h"
+    "src/Audio/SDL/*.h"
 	# Include impl
 	"src/*.cpp"
 	"src/Exception/*.cpp"
 	"src/Graphic/*.cpp"
     "src/Graphic/SDL/*.cpp"
+    "src/Audio/*.cpp"
+    "src/Audio/SDL/*.cpp"
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})

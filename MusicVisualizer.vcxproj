@@ -48,15 +48,20 @@
   <ItemDefinitionGroup>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Audio\SDL\AudioWrapper.cpp" />
+    <ClCompile Include="src\Audio\Player.cpp" />
     <ClCompile Include="src\Logger.cpp" />
     <ClCompile Include="src\Graphic\SDL\RendererWrapper.cpp" />
     <ClCompile Include="src\Graphic\Renderer.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include=".gitattributes" />
     <None Include=".gitignore" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Audio\Player.h" />
+    <ClInclude Include="src\Audio\SDL\AudioWrapper.h" />
     <ClInclude Include="src\Exception\AppException.h" />
     <ClInclude Include="src\Logger.h" />
     <ClInclude Include="src\Graphic\SDL\RendererWrapper.h" />

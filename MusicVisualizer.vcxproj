@@ -40,10 +40,10 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <NMakePreprocessorDefinitions>WIN32;_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
-    <IncludePath>$(SolutionDir)extern\SDL2\include;$(SolutionDir)src;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)extern\SDL2\include;$(SolutionDir)src;$(SolutionDir)extern\fftw-3.3.5-dll64;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)extern\SDL2\include;$(SolutionDir)src;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)extern\SDL2\include;$(SolutionDir)src;$(SolutionDir)extern\fftw-3.3.5-dll64;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup>
   </ItemDefinitionGroup>
@@ -54,12 +54,17 @@
     <ClCompile Include="src\Graphic\SDL\RendererWrapper.cpp" />
     <ClCompile Include="src\Graphic\Renderer.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Graphic\SDL\Visualizer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitattributes" />
     <None Include=".gitignore" />
+    <None Include="CMakeSettings.json" />
+    <None Include="LICENSE" />
+    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Audio\AudioData.h" />
     <ClInclude Include="src\Audio\Player.h" />
     <ClInclude Include="src\Audio\SDL\AudioWrapper.h" />
     <ClInclude Include="src\Exception\AppException.h" />
@@ -67,6 +72,10 @@
     <ClInclude Include="src\Graphic\SDL\RendererWrapper.h" />
     <ClInclude Include="src\Graphic\Renderer.h" />
     <ClInclude Include="src\Graphic\Window.h" />
+    <ClInclude Include="src\Graphic\SDL\Visualizer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="CMakeLists.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

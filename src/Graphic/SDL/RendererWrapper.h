@@ -1,7 +1,10 @@
 #pragma once
 
 #include <SDL.h>
+#include <memory>
 #include "Graphic/Renderer.h"
+#include "Graphic/SDL/Visualizer.h"
+#include "Audio/AudioData.h"
 
 namespace MV {
 	class RendererWrapper : public Renderer
@@ -11,12 +14,13 @@ namespace MV {
 		~RendererWrapper();
 	protected:
 		virtual void CallClearScreen() override;
-		virtual void CallDrawBuffer() override;
+		virtual void CallDrawBuffer(const AudioData* audiodata) override;
 		virtual void CallPullEvents() override;
 		virtual bool CallIsRunning() override;
 	private:
 		SDL_Window* m_Window;
-		SDL_Renderer* m_Renderer;
+		std::shared_ptr<SDL_Renderer> m_Renderer;
+		Visualizer* m_Visualizer;
 	private:
 		bool m_IsRunning;
 

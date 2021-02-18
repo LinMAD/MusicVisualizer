@@ -9,7 +9,7 @@ namespace MV {
 	class Log {
 	public:
 		void ToggleIsEnabled();
-		void Write(string message);
+		void Write(const string& message);
 		static shared_ptr<Log> GetInstance();
 	protected:
 		Log();

@@ -1,19 +1,29 @@
 #pragma once
 
 #include <string>
+#include <memory>
+#include <vector>
 #include "Audio/SDL/AudioWrapper.h"
+
+using namespace std;
 
 namespace MV {
 	class Player
 	{
 	public:
 		Player();
+		~Player();
 
-		void Play(std::string pathToFile);
+		void Add(string pathToFile);
+		void Play(string pathToFile);
+		const AudioData* GetAudioData(string pathToFile);
 	private:
-		int isPlaying;
+		AudioWrapper* FindAudio(string pathToFile);
+	private:
+		bool m_IsPlaying;
 
 		// TODO Can be added to the list to have playlist
-		AudioWrapper* m_Audio;
+		// TODO Add mutex
+		vector<AudioWrapper*> m_PlayList;
 	};
 }

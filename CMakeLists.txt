@@ -11,28 +11,25 @@ endif()
 set(CXX_FLAGS "-Wall")
 set(CMAKE_CXX_FLAGS, "${CXX_FLAGS}")
 
-if (WIN32)
+# Check platform
+if (WIN32) # Windows build
+	# TODO Move paths to `CMakeSettings.json`
 	set(SDL2_INCLUDE_DIRS "${CMAKE_CURRENT_LIST_DIR}/extern/SDL2/include")
-
 	if (${CMAKE_SIZEOF_VOID_P} MATCHES 8)
-		set(SDL2_LIB_DIR  "${CMAKE_CURRENT_LIST_DIR}/extern/SDL2/lib/x64")
+		set(SDL2_LIB_DIR "${CMAKE_CURRENT_LIST_DIR}/extern/SDL2/lib/x64")
 		file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/extern/SDL2/lib/x64/SDL2.dll" DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 	else ()
-		set(SDL2_LIB_DIR  "${CMAKE_CURRENT_LIST_DIR}/extern/SDL2/lib/x86")
+		set(SDL2_LIB_DIR "${CMAKE_CURRENT_LIST_DIR}/extern/SDL2/lib/x86")
 		file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/extern/SDL2/lib/x86/SDL2.dll" DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 	endif ()
 
 	link_directories(${SDL2_LIB_DIR})
-else ()
-	set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
-
-	find_package(SDL2 REQUIRED)
-	string(STRIP "${SDL2_LIBRARIES}" src)
-	target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES})
 endif ()
 
+# Libraries files
 include_directories(${SDL2_INCLUDE_DIRS} src)
 
+# Project files
 file(GLOB SOURCES
 	# Include headers
 	"src/*.h"
@@ -41,6 +38,7 @@ file(GLOB SOURCES
     "src/Graphic/SDL/*.h"
     "src/Audio/*.h"
     "src/Audio/SDL/*.h"
+
 	# Include impl
 	"src/*.cpp"
 	"src/Exception/*.cpp"

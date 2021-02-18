@@ -2,53 +2,104 @@
 #include "Logger.h"
 #include "Exception/AppException.h"
 
-MV::AudioWrapper::AudioWrapper()
-{
-	m_IsPaused = 1;
-}
-
-MV::AudioWrapper::~AudioWrapper()
-{
-	SDL_CloseAudioDevice(m_Device);
-	SDL_FreeWAV(m_WavBuffer);
-}
-
-void MV::AudioWrapper::Execute(std::string pathToFile)
-{
-	std::string execMsg{ "Loading given audio file: " + pathToFile };
-	LOGGER_DEBUG(execMsg);
-
-	if (SDL_LoadWAV(pathToFile.c_str(), &m_WavSpec, &m_WavBuffer, &m_Wavlength) == NULL)
+namespace MV {
+	AudioWrapper::AudioWrapper(const std::string& pathToFile)
 	{
-		LOGGER_DEBUG("Impossible to load audio file!");
-		throw AppException(SDL_GetError());
+		m_IsPlaying = false;
+		m_PathToFile = pathToFile;
 	}
 
-	m_Device = SDL_OpenAudioDevice(NULL, 0, &m_WavSpec, NULL, 0);
-	if (m_Device == 0)
+	void AudioWrapper::Execute()
 	{
-		LOGGER_DEBUG("Error with audio device!");
-		throw AppException(SDL_GetError());
+		std::string execMsg{ "Loading given audio file: " + m_PathToFile };
+		LOGGER_DEBUG(execMsg);
+
+		if (SDL_LoadWAV(m_PathToFile.c_str(), &m_WavSpec, &m_WavStartBuffer, &m_WavLength) == NULL)
+		{
+			LOGGER_DEBUG("Impossible to load audio file!");
+			throw AppException(SDL_GetError());
+		}
+
+		m_AudioData = std::make_shared<AudioData>();
+		m_AudioData->position = m_WavStartBuffer;
+		m_AudioData->length = m_WavLength;
+		m_AudioData->format = AUDIO_S16;
+
+		m_WavSpec.freq = AUDIO_SAMPLING_FREQUENCY_RATE;
+		m_WavSpec.channels = AUDIO_CHANNEL_COUNT;
+		m_WavSpec.samples = AUDIO_BUFFER_SAMPLE_FRAMES;
+		m_WavSpec.callback = ForwardCallback;
+		m_WavSpec.userdata = m_AudioData.get();
+		m_WavSpec.format = m_AudioData->format;
+
+		m_Device = SDL_OpenAudioDevice(
+			NULL,
+			0,
+			&m_WavSpec,
+			&m_Obtained,
+			NULL
+		);
+		if (m_Device == 0)
+		{
+			LOGGER_DEBUG("Error with audio device!");
+			throw AppException(SDL_GetError());
+		}
+
+		execMsg = { "Playing audio from: " + m_PathToFile };
+		LOGGER_DEBUG(execMsg);
+
+		m_IsPlaying = true;
+
+		SDL_PauseAudioDevice(m_Device, SDL_FALSE);
 	}
 
-	if (SDL_QueueAudio(m_Device, m_WavBuffer, m_Wavlength) < 0)
+	AudioData* AudioWrapper::GetSourceAudioData()
 	{
-		LOGGER_DEBUG("Cannot add to queue audio...");
-		throw AppException(SDL_GetError());
+		return m_AudioData.get();
 	}
 
-	execMsg = { "Playing new audio from: " + pathToFile };
-	LOGGER_DEBUG(execMsg);
+	const std::string& AudioWrapper::GetFilePath()
+	{
+		return m_PathToFile;
+	}
 
-	SDL_PauseAudioDevice(m_Device, 0);
-}
+	bool AudioWrapper::IsStopped()
+	{
+		if (m_IsPlaying && m_AudioData->length == 0)
+		{
+			m_IsPlaying = false;
+			ClearResources();
+		}
 
-bool MV::AudioWrapper::IsStopped()
-{
-	auto queuedAudio = SDL_GetQueuedAudioSize(m_Device);
-	auto diviceState = SDL_GetAudioDeviceStatus(m_Device);
-	bool isStoped = diviceState == SDL_AUDIO_STOPPED || queuedAudio <= 0;
-	if (isStoped) m_IsPaused = 1;
+		return !m_IsPlaying;
+	}
 
-	return isStoped;
+	void AudioWrapper::ForwardCallback(void* userData, Uint8* stream, int steamLenght)
+	{
+		struct AudioData* audio = (struct AudioData*) userData;
+
+		if (audio->length == 0)
+		{
+			SDL_FreeWAV(audio->stream);
+			return;
+		}
+
+		// TODO Exec thread?
+		audio->stream = stream;
+
+		uint32_t length = (uint32_t) steamLenght;
+		length = (length > audio->length ? audio->length : length);
+
+		SDL_memcpy(audio->stream, audio->position, length);
+
+		audio->position += length;
+		audio->length -= length;
+		std::string audioPath = { "Postion:: " + std::to_string(*audio->position) + " Available Lenght:: " + std::to_string(audio->length) };
+		LOGGER_DEBUG(audioPath);
+	}
+
+	void AudioWrapper::ClearResources()
+	{
+		SDL_CloseAudioDevice(m_Device);
+	}
 }

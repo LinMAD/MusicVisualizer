@@ -5,10 +5,6 @@
 #include "Exception/AppException.h"
 
 namespace MV {
-	//static uint8_t* audioPos = nullptr;
-	//static uint32_t audioRemainingLen = 0;
-	//static int isAudioPaused = 1;
-
 	RendererWrapper::RendererWrapper()
 	{
 		LOGGER_DEBUG("Initializing SDL components...");
@@ -41,41 +37,42 @@ namespace MV {
 			throw AppException(SDL_GetError());
 		}
 
-		m_Renderer = SDL_CreateRenderer(m_Window, -1, SDL_RENDERER_ACCELERATED);
+		m_Renderer = std::shared_ptr<SDL_Renderer>(SDL_CreateRenderer(m_Window, -1, SDL_RENDERER_ACCELERATED));
 		if (m_Renderer == nullptr)
 		{
 			LOGGER_DEBUG("Renderer could not be created!");
 			throw AppException(SDL_GetError());
 		}
 
+		m_Visualizer = new Visualizer(m_Renderer);
 		m_IsRunning = true;
 		LOGGER_DEBUG("Initialization of SDL components, done...");
 	}
 
 	RendererWrapper::~RendererWrapper()
 	{
-		SDL_DestroyRenderer(m_Renderer);
+		SDL_DestroyRenderer(m_Renderer.get());
 		SDL_DestroyWindow(m_Window);
 		SDL_Quit();
 	}
 
 	void RendererWrapper::CallClearScreen()
 	{
-		SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 255);
-		SDL_RenderClear(m_Renderer);
+		SDL_SetRenderDrawColor(m_Renderer.get(), 0, 0, 0, 255);
+		SDL_RenderClear(m_Renderer.get());
 	}
 
-	void RendererWrapper::CallDrawBuffer()
+	void RendererWrapper::CallDrawBuffer(const AudioData* audiodata)
 	{
 		if (!m_StartTime)
 			m_StartTime = (uint32_t) SDL_GetTicks();
 		else
 			m_Delta = m_EndTime - m_StartTime;
 
-		if (m_Delta < m_TimePerFrameinMilliSec)
+		if ((short) m_Delta < m_TimePerFrameinMilliSec)
 			SDL_Delay(m_TimePerFrameinMilliSec - m_Delta);
 
-		if (m_Delta > m_TimePerFrameinMilliSec)
+		if ((short) m_Delta > m_TimePerFrameinMilliSec)
 			m_Fps = 1000 / m_Delta;
 
 		/*
@@ -85,13 +82,10 @@ namespace MV {
 		std::string title{ string(WINDOW_TITLE) + " FPS: " + std::to_string(m_Fps) };
 		SDL_SetWindowTitle(m_Window, title.c_str());
 
-		// Square
-		SDL_Rect square{ 50, 50, 50, 50};
+		// Render sound wave
+		m_Visualizer->DrawWave(audiodata, SDL_Point{ 0, WINDOW_HEIGHT / 2 }, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_Color{ 50, 200, 50, 255 });
 
-		SDL_SetRenderDrawColor(m_Renderer, 0, 0, 255, 255);
-		SDL_RenderFillRect(m_Renderer, &square);
-		SDL_RenderPresent(m_Renderer);
-		// End of square
+		SDL_RenderPresent(m_Renderer.get());
 
 		m_StartTime = m_EndTime;
 		m_EndTime = (uint32_t) SDL_GetTicks();

@@ -94,8 +94,8 @@ namespace MV {
 
 		audio->position += length;
 		audio->length -= length;
-		std::string audioPath = { "Postion:: " + std::to_string(*audio->position) + " Available Lenght:: " + std::to_string(audio->length) };
-		LOGGER_DEBUG(audioPath);
+		//std::string audioPath = { "Postion:: " + std::to_string(*audio->position) + " Available Lenght:: " + std::to_string(audio->length) };
+		//LOGGER_DEBUG(audioPath);
 	}
 
 	void AudioWrapper::ClearResources()

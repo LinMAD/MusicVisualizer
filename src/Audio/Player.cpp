@@ -34,8 +34,8 @@ namespace MV {
 	const AudioData* Player::GetAudioData(string pathToFile)
 	{
 		auto needed = FindAudio(pathToFile);
-		if (needed != nullptr) 
-			return new AudioData(); // stab
+		if (needed != nullptr)
+			return needed->GetSourceAudioData();
 
 		return nullptr;
 	}

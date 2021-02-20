@@ -21,6 +21,7 @@ namespace MV {
 		}
 
 		m_AudioData = std::make_shared<AudioData>();
+		m_AudioData->name = m_PathToFile; // TODO Replace by base name or get info from file
 		m_AudioData->position = m_WavStartBuffer;
 		m_AudioData->length = m_WavLength;
 		m_AudioData->format = AUDIO_S16;
@@ -94,8 +95,6 @@ namespace MV {
 
 		audio->position += length;
 		audio->length -= length;
-		//std::string audioPath = { "Postion:: " + std::to_string(*audio->position) + " Available Lenght:: " + std::to_string(audio->length) };
-		//LOGGER_DEBUG(audioPath);
 	}
 
 	void AudioWrapper::ClearResources()

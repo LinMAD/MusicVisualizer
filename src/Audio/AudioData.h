@@ -1,7 +1,7 @@
-
 #pragma once
 
 #include <stdint.h>
+#include <string>
 
 namespace MV {
     constexpr int AUDIO_BUFFER_SAMPLE_FRAMES = 2048;
@@ -10,6 +10,7 @@ namespace MV {
 
     struct AudioData
     {
+        std::string name;
         uint8_t* stream;
         uint8_t* position;
         uint32_t length;

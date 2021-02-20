@@ -12,6 +12,7 @@ void MV::Visualizer::DrawWave(const AudioData* audioData, const SDL_Point& start
 {
 	std::vector<SDL_Point> points;
 
+    // TODO Refactor this visualisation and use calculations from FFTW
     if (audioData->length != 0) {
         // use smallest possible step so soundwave fills window
         int step = (int)ceil((double) lineWidth / (double) audioData->length);
@@ -19,8 +20,6 @@ void MV::Visualizer::DrawWave(const AudioData* audioData, const SDL_Point& start
         for (int i = 0; i < lineWidth; i += step) {
             points.push_back(SDL_Point{ start.x + i, (int)(start.y + *amplitude) });
             ++amplitude;
-            //std::string audioPath = { "Wave Axix => X: " + std::to_string(start.x + i) + " Y: " + std::to_string(start.y) + std::to_string(*amplitude) };
-            //LOGGER_DEBUG(audioPath);
         }
     }
     else { // silence

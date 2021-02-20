@@ -3,6 +3,7 @@
 #include <string>
 #include <memory>
 #include <vector>
+#include <mutex>
 #include "Audio/SDL/AudioWrapper.h"
 
 using namespace std;
@@ -22,8 +23,7 @@ namespace MV {
 	private:
 		bool m_IsPlaying;
 
-		// TODO Can be added to the list to have playlist
-		// TODO Add mutex
 		vector<AudioWrapper*> m_PlayList;
+		timed_mutex _mutex;
 	};
 }

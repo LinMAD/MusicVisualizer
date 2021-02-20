@@ -15,7 +15,11 @@ namespace MV {
 
 	void Player::Add(string pathToFile)
 	{
+		_mutex.lock();
+
 		m_PlayList.push_back(new AudioWrapper(pathToFile));
+
+		_mutex.unlock();
 	}
 
 	void Player::Play(string pathToFile)
@@ -27,6 +31,7 @@ namespace MV {
 			return;
 		}
 
+		// TODO Can be executed next audio file if current is done
 		// Controll loop of audio play
 		if (needed->IsStopped()) needed->Execute();
 	}
@@ -42,10 +47,19 @@ namespace MV {
 
 	AudioWrapper* Player::FindAudio(string pathToFile)
 	{
+		AudioWrapper* needed = nullptr;
+		
+		_mutex.lock();
+
 		for (auto audio : m_PlayList)
 			if (audio->GetFilePath() == pathToFile)
-				return audio;
+			{
+				needed = audio;
+				break;
+			}
 
-		return nullptr;
+		_mutex.unlock();
+
+		return needed;
 	}
 }

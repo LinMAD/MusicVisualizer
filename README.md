@@ -1,9 +1,13 @@
 # Music visualizer
 
-Brings some old vibes from Windows XP music player.
+> Allows you to play audio files (`wav`) with simple audio wave "visualisation".
+
+Test audio you can use coffee machine sound from `build/test.wav`.
+
+# ! Right now there is no volume control to reduce system volume manually or you can be shocked !
 
 ## Dependencies for Running Locally
-* cmake >= 3.7
+* cmake >= 3.8
   * All OSes: [click here for installation instructions](https://cmake.org/install/)
 * make >= 4.1 (Linux, Mac), 3.81 (Windows)
   * Linux: make is installed by default on most Linux distros
@@ -12,7 +16,6 @@ Brings some old vibes from Windows XP music player.
 * SDL2 >= 2.0
   * All installation instructions can be found [here](https://wiki.libsdl.org/Installation)
   * Note that for Linux, an `apt` or `apt-get` installation is preferred to building from source.
-  * Or you can define path to SDL2 from this repository `extern/SDL2`.
 * gcc/g++ >= 5.4
   * Linux: gcc / g++ is installed by default on most Linux distros
   * Mac: same deal as make - [install Xcode command line tools](https://developer.apple.com/xcode/features/)
@@ -21,6 +24,5 @@ Brings some old vibes from Windows XP music player.
 ## Basic Build Instructions
 
 1. Clone this repo.
-2. Make a build directory in the top level directory: `mkdir build && cd build`
-3. Compile: `cmake .. && make`
-4. Run it.
+2. Compile: `cd build && cmake .. && make`.
+3. Run it ``.

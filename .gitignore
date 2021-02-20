@@ -1,3 +1,6 @@
-.vs
-out
-Debug
+.vs/
+out/
+!build/.gitignore
+install/
+Debug/
+extern/SDL2/

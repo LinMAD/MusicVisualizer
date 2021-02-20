@@ -33,6 +33,7 @@ int main(int argc, char* argv[])
 	{
 		renderer->HandleEvents();
 		player->Play(filename);
+
 		renderer->Draw(player->GetAudioData(filename));
 	}
 

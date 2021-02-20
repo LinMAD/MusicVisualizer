@@ -19,7 +19,7 @@ namespace MV {
 		virtual bool CallIsRunning() override;
 	private:
 		SDL_Window* m_Window;
-		std::shared_ptr<SDL_Renderer> m_Renderer;
+		SDL_Renderer* m_Renderer;
 		Visualizer* m_Visualizer;
 	private:
 		bool m_IsRunning;

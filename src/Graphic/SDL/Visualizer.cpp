@@ -3,12 +3,12 @@
 #include "Graphic/Window.h"
 #include "Logger.h"
 
-MV::Visualizer::Visualizer(std::shared_ptr<SDL_Renderer> renderer)
+MV::Visualizer::Visualizer(SDL_Renderer* renderer)
 {
 	m_Renderer = renderer;
 }
 
-void MV::Visualizer::DrawWave(const AudioData* audioData, const SDL_Point& start, int lineWidth, int lineHeight, const SDL_Color& color)
+void MV::Visualizer::DrawWave(const AudioData* audioData, const SDL_Point& start, int lineWidth, const SDL_Color& color)
 {
 	std::vector<SDL_Point> points;
 
@@ -28,6 +28,6 @@ void MV::Visualizer::DrawWave(const AudioData* audioData, const SDL_Point& start
 
     }
 
-    SDL_SetRenderDrawColor(m_Renderer.get(), color.r, color.g, color.b, color.a);
-	SDL_RenderDrawLines(m_Renderer.get(), &points[0], (int)points.size());
+    SDL_SetRenderDrawColor(m_Renderer, color.r, color.g, color.b, color.a);
+	SDL_RenderDrawLines(m_Renderer, &points[0], (int)points.size());
 }

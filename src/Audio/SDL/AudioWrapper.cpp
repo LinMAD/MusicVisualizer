@@ -22,9 +22,10 @@ namespace MV {
 
 		m_AudioData = std::make_shared<AudioData>();
 		m_AudioData->name = m_PathToFile; // TODO Replace by base name or get info from file
-		m_AudioData->position = m_WavStartBuffer;
 		m_AudioData->length = m_WavLength;
 		m_AudioData->format = AUDIO_S16;
+		m_AudioData->position = m_WavStartBuffer;
+		m_AudioData->stream = m_WavStartBuffer;
 
 		m_WavSpec.freq = AUDIO_SAMPLING_FREQUENCY_RATE;
 		m_WavSpec.channels = AUDIO_CHANNEL_COUNT;
@@ -33,13 +34,7 @@ namespace MV {
 		m_WavSpec.userdata = m_AudioData.get();
 		m_WavSpec.format = m_AudioData->format;
 
-		m_Device = SDL_OpenAudioDevice(
-			NULL,
-			0,
-			&m_WavSpec,
-			&m_Obtained,
-			NULL
-		);
+		m_Device = SDL_OpenAudioDevice(nullptr, 0, &m_WavSpec, &m_Obtained, 0);
 		if (m_Device == 0)
 		{
 			LOGGER_DEBUG("Error with audio device!");
@@ -49,9 +44,11 @@ namespace MV {
 		execMsg = { "Playing audio from: " + m_PathToFile };
 		LOGGER_DEBUG(execMsg);
 
+		SDL_LockAudioDevice(m_Device);
 		m_IsPlaying = true;
 
 		SDL_PauseAudioDevice(m_Device, SDL_FALSE);
+		SDL_UnlockAudioDevice(m_Device);
 	}
 
 	AudioData* AudioWrapper::GetSourceAudioData()
@@ -78,23 +75,23 @@ namespace MV {
 	void AudioWrapper::ForwardCallback(void* userData, Uint8* stream, int steamLenght)
 	{
 		struct AudioData* audio = (struct AudioData*) userData;
-
-		if (audio->length == 0)
+		SDL_memset(stream, 0, steamLenght);
+		if (audio->length <= 0)
 		{
 			SDL_FreeWAV(audio->stream);
+			free(audio->stream);
+			free(audio->position);
 			return;
 		}
 
-		// TODO Exec thread?
+		uint32_t tempLength = (uint32_t) steamLenght;
+		tempLength = ((uint32_t) steamLenght > audio->length) ? audio->length : (uint32_t) steamLenght;
+
+		SDL_MixAudioFormat(audio->stream, audio->position, audio->format, tempLength, AUDIO_MAX_SOUNDS);
+
+		audio->position += tempLength;
+		audio->length -= tempLength;
 		audio->stream = stream;
-
-		uint32_t length = (uint32_t) steamLenght;
-		length = (length > audio->length ? audio->length : length);
-
-		SDL_memcpy(audio->stream, audio->position, length);
-
-		audio->position += length;
-		audio->length -= length;
 	}
 
 	void AudioWrapper::ClearResources()

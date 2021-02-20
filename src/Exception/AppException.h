@@ -7,9 +7,10 @@ namespace MV {
 	class AppException : public std::exception
 	{
 	public:
-		explicit AppException(char const* const _Message) : exception(_Message)
+		explicit AppException(const char* _Message) : exception()
 		{
-			LOGGER_DEBUG(strcat("Exception: ", _Message));
+			std::string err = _Message;
+			LOGGER_DEBUG("Exception: " + err);
 		};
 	};
 }

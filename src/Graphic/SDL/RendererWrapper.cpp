@@ -37,11 +37,11 @@ namespace MV {
 			throw AppException(SDL_GetError());
 		}
 
-		m_Renderer = std::shared_ptr<SDL_Renderer>(SDL_CreateRenderer(m_Window, -1, SDL_RENDERER_ACCELERATED));
+		m_Renderer = SDL_CreateRenderer(m_Window, -1, SDL_RENDERER_ACCELERATED);
 		if (m_Renderer == nullptr)
 		{
 			LOGGER_DEBUG("Renderer could not be created!");
-			throw AppException(SDL_GetError());
+			throw AppException(SDL_GetError());	
 		}
 
 		m_Visualizer = new Visualizer(m_Renderer);
@@ -51,15 +51,15 @@ namespace MV {
 
 	RendererWrapper::~RendererWrapper()
 	{
-		SDL_DestroyRenderer(m_Renderer.get());
+		SDL_DestroyRenderer(m_Renderer);
 		SDL_DestroyWindow(m_Window);
 		SDL_Quit();
 	}
 
 	void RendererWrapper::CallClearScreen()
 	{
-		SDL_SetRenderDrawColor(m_Renderer.get(), 0, 0, 0, 255);
-		SDL_RenderClear(m_Renderer.get());
+		SDL_SetRenderDrawColor(m_Renderer, 0, 0, 0, 255);
+		SDL_RenderClear(m_Renderer);
 	}
 
 	void RendererWrapper::CallDrawBuffer(const AudioData* audiodata)
@@ -83,9 +83,9 @@ namespace MV {
 		SDL_SetWindowTitle(m_Window, title.c_str());
 
 		// Render sound wave
-		m_Visualizer->DrawWave(audiodata, SDL_Point{ 0, WINDOW_HEIGHT / 2 }, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_Color{ 50, 200, 50, 255 });
+		m_Visualizer->DrawWave(audiodata, SDL_Point{ 0, WINDOW_HEIGHT / 2 }, WINDOW_WIDTH, SDL_Color{ 50, 200, 50, 255 });
 
-		SDL_RenderPresent(m_Renderer.get());
+		SDL_RenderPresent(m_Renderer);
 
 		m_StartTime = m_EndTime;
 		m_EndTime = (uint32_t) SDL_GetTicks();

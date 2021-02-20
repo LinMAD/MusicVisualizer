@@ -60,6 +60,7 @@
     <None Include=".gitattributes" />
     <None Include=".gitignore" />
     <None Include="CMakeSettings.json" />
+    <None Include="extern\cmake\FindSDL2.cmake" />
     <None Include="LICENSE" />
     <None Include="README.md" />
   </ItemGroup>

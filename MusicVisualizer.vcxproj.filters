@@ -43,6 +43,7 @@
     <None Include="CMakeSettings.json" />
     <None Include="LICENSE" />
     <None Include="README.md" />
+    <None Include="extern\cmake\FindSDL2.cmake" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Graphic\Renderer.h">

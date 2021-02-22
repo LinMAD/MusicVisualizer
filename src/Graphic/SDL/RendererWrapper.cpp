@@ -7,7 +7,7 @@
 namespace MV {
 	RendererWrapper::RendererWrapper()
 	{
-		LOGGER_DEBUG("Initializing SDL components...");
+		LOG("Initializing SDL components...");
 		
 		// Video
 		m_StartTime = 0;
@@ -18,7 +18,7 @@ namespace MV {
 
 		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
 		{
-			LOGGER_DEBUG("SDL could not initialize!");
+			LOG("SDL could not initialize!");
 			throw AppException(SDL_GetError());
 		}
 
@@ -33,20 +33,20 @@ namespace MV {
 
 		if (m_Window == nullptr) 
 		{
-			LOGGER_DEBUG("Window could not be created!");
+			LOG("Window could not be created!");
 			throw AppException(SDL_GetError());
 		}
 
 		m_Renderer = SDL_CreateRenderer(m_Window, -1, SDL_RENDERER_ACCELERATED);
 		if (m_Renderer == nullptr)
 		{
-			LOGGER_DEBUG("Renderer could not be created!");
+			LOG("Renderer could not be created!");
 			throw AppException(SDL_GetError());	
 		}
 
 		m_Visualizer = new Visualizer(m_Renderer);
 		m_IsRunning = true;
-		LOGGER_DEBUG("Initialization of SDL components, done...");
+		LOG("Initialization of SDL components, done...");
 	}
 
 	RendererWrapper::~RendererWrapper()
@@ -62,7 +62,7 @@ namespace MV {
 		SDL_RenderClear(m_Renderer);
 	}
 
-	void RendererWrapper::CallDrawBuffer(const AudioData* audiodata)
+	void RendererWrapper::CallDrawBuffer(std::shared_ptr<AudioData> audiodata)
 	{
 		if (!m_StartTime)
 			m_StartTime = (uint32_t) SDL_GetTicks();

@@ -17,15 +17,22 @@ char* GetCmdOption(char** begin, char** end, const std::string& option)
 
 int main(int argc, char* argv[])
 {
-	char* filename = GetCmdOption(argv, argv + argc, "-f");
-	if (filename == nullptr)
+	char* inputFilePath = GetCmdOption(argv, argv + argc, "-f");
+	if (inputFilePath == nullptr)
 	{
-		LOGGER_DEBUG("Provide audio file path with input CMD option '-f'");
+		LOG("Provide audio file path with input CMD option '-f'");
 		return 1;
 	}
 
-	auto player = new Player();
-	auto renderer = Renderer::GetActuallRenderer();
+	std::string filename(inputFilePath);
+	if(filename.substr(filename.find_last_of(".") + 1) != "wav")
+	{
+		LOG("Given not 'wav' file");
+		return 1;
+	}
+
+	Player* player = new Player();
+	Renderer* renderer = Renderer::GetActuallRenderer();
 
 	player->Add(filename);
 

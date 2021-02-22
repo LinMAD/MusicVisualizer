@@ -10,7 +10,7 @@ namespace MV {
 	public:
 		Visualizer(SDL_Renderer* renderer);
 
-		void DrawWave(const AudioData* audiodata, const SDL_Point& start, int lineWidth, const SDL_Color& color);
+		void DrawWave(std::shared_ptr<AudioData>, const SDL_Point& start, int lineWidth, const SDL_Color& color);
 	private:
 		SDL_Renderer* m_Renderer;
 	};

@@ -15,11 +15,11 @@ namespace MV {
 		Player();
 		~Player();
 
-		void Add(string pathToFile);
-		void Play(string pathToFile);
-		const AudioData* GetAudioData(string pathToFile);
+		void Add(const string& pathToFile);
+		void Play(const string& pathToFile);
+		std::shared_ptr<AudioData> GetAudioData(const string& pathToFile);
 	private:
-		AudioWrapper* FindAudio(string pathToFile);
+		AudioWrapper* FindAudio(const string& pathToFile);
 	private:
 		bool m_IsPlaying;
 

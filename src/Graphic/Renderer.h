@@ -12,7 +12,7 @@ namespace MV {
 			s_RendererImpl->CallPullEvents();
 		}
 
-		inline static void Draw(const AudioData* audiodata)
+		inline static void Draw(std::shared_ptr<AudioData> audiodata)
 		{
 			s_RendererImpl->CallClearScreen();
 			s_RendererImpl->CallDrawBuffer(audiodata);
@@ -29,7 +29,7 @@ namespace MV {
 		}
 	protected:
 		virtual void CallClearScreen() = 0;
-		virtual void CallDrawBuffer(const AudioData* audiodata) = 0;
+		virtual void CallDrawBuffer(std::shared_ptr<AudioData> audiodata) = 0;
 		virtual void CallPullEvents() = 0;
 		virtual bool CallIsRunning() = 0;
 	private:

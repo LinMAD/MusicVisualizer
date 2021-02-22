@@ -17,6 +17,7 @@ if (WIN32)
 		set(SDL2_LIB_DIR "${SDL2_PATH}/lib/x86")
 	endif ()
 
+	file(COPY "${CMAKE_SOURCE_DIR}/build/test.wav" DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 	file(COPY "${SDL2_LIB_DIR}/SDL2.dll" DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 	link_directories(${SDL2_LIB_DIR})
 else ()
@@ -27,29 +28,35 @@ else ()
 	include_directories(${SDL2_INCLUDE_DIRS})
 endif ()
 
-file(GLOB SOURCES
+add_executable(
+	${PROJECT_NAME}
+
 	# Include headers
-	"src/*.h"
-	"src/Exception/*.h"
-	"src/Graphic/*.h"
-	"src/Graphic/SDL/*.h"
-	"src/Audio/*.h"
-	"src/Audio/SDL/*.h"
+	"src/Logger.h"
+	"src/Exception/AppException.h"
+	"src/Graphic/Window.h"
+	"src/Graphic/Renderer.h"
+	"src/Graphic/SDL/RendererWrapper.h"
+	"src/Graphic/SDL/Visualizer.h"
+	"src/Audio/Player.h"
+	"src/Audio/AudioData.h"
+	"src/Audio/SDL/AudioWrapper.h"
 
 	# Include impl
-	"src/*.cpp"
-	"src/Exception/*.cpp"
-	"src/Graphic/*.cpp"
-	"src/Graphic/SDL/*.cpp"
-	"src/Audio/*.cpp"
-	"src/Audio/SDL/*.cpp"
+	"src/main.cpp"
+	"src/Logger.cpp"
+	"src/Graphic/Renderer.cpp"
+	"src/Graphic/SDL/RendererWrapper.cpp"
+	"src/Graphic/SDL/Visualizer.cpp"
+	"src/Audio/Player.cpp"
+	"src/Audio/SDL/AudioWrapper.cpp"
 )
 
-add_executable(${PROJECT_NAME} ${SOURCES})
 include_directories(${SDL2_INCLUDE_DIRS} src)
 
 if (WIN32)
 	target_link_libraries(${PROJECT_NAME} SDL2main SDL2)
 else ()
+	string(STRIP ${SDL2_LIBRARIES} SDL2_LIBRARIES)
 	target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES})
 endif ()

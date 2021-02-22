@@ -10,7 +10,7 @@ namespace MV {
 		explicit AppException(const char* _Message) : exception()
 		{
 			std::string err = _Message;
-			LOGGER_DEBUG("Exception: " + err);
+			LOG("Exception: " + err);
 		};
 	};
 }

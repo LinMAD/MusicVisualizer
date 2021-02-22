@@ -19,4 +19,4 @@ namespace MV {
 	};
 }
 
-#define LOGGER_DEBUG(...)::MV::Log::GetInstance()->Write(__VA_ARGS__);
+#define LOG(...)::MV::Log::GetInstance()->Write(__VA_ARGS__);

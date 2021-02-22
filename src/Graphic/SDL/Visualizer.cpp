@@ -8,7 +8,7 @@ MV::Visualizer::Visualizer(SDL_Renderer* renderer)
 	m_Renderer = renderer;
 }
 
-void MV::Visualizer::DrawWave(const AudioData* audioData, const SDL_Point& start, int lineWidth, const SDL_Color& color)
+void MV::Visualizer::DrawWave(std::shared_ptr<AudioData> audioData, const SDL_Point& start, int lineWidth, const SDL_Color& color)
 {
 	std::vector<SDL_Point> points;
 

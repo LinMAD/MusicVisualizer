@@ -1,3 +1,0 @@
-/mnt/d/Devil/C++/MusicVisualizer/build/CMakeFiles/rebuild_cache.dir
-/mnt/d/Devil/C++/MusicVisualizer/build/CMakeFiles/MusicVisualizer.dir
-/mnt/d/Devil/C++/MusicVisualizer/build/CMakeFiles/edit_cache.dir

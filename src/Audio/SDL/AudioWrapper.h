@@ -13,7 +13,7 @@ namespace MV {
 
 		void Execute();
 
-		AudioData* GetSourceAudioData();
+		std::shared_ptr<AudioData> GetSourceAudioData();
 		const std::string& GetFilePath();
 
 		bool IsStopped();

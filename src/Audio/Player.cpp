@@ -9,11 +9,11 @@ namespace MV {
 
 	Player::~Player()
 	{
-		LOGGER_DEBUG("Cleaning audio objects from playlist...");
+		LOG("Cleaning audio objects from playlist...");
 		m_PlayList.clear();
 	}
 
-	void Player::Add(string pathToFile)
+	void Player::Add(const string& pathToFile)
 	{
 		_mutex.lock();
 
@@ -22,12 +22,12 @@ namespace MV {
 		_mutex.unlock();
 	}
 
-	void Player::Play(string pathToFile)
+	void Player::Play(const string& pathToFile)
 	{
 		AudioWrapper* needed = FindAudio(pathToFile);
 		if (needed == nullptr)
 		{
-			LOGGER_DEBUG(pathToFile + " not found in playlist!");
+			LOG(pathToFile + " not found in playlist!");
 			return;
 		}
 
@@ -36,7 +36,7 @@ namespace MV {
 		if (needed->IsStopped()) needed->Execute();
 	}
 
-	const AudioData* Player::GetAudioData(string pathToFile)
+	std::shared_ptr<AudioData> Player::GetAudioData(const string& pathToFile)
 	{
 		auto needed = FindAudio(pathToFile);
 		if (needed != nullptr)
@@ -45,7 +45,7 @@ namespace MV {
 		return nullptr;
 	}
 
-	AudioWrapper* Player::FindAudio(string pathToFile)
+	AudioWrapper* Player::FindAudio(const string& pathToFile)
 	{
 		AudioWrapper* needed = nullptr;
 		

@@ -14,7 +14,7 @@ namespace MV {
 		~RendererWrapper();
 	protected:
 		virtual void CallClearScreen() override;
-		virtual void CallDrawBuffer(const AudioData* audiodata) override;
+		virtual void CallDrawBuffer(std::shared_ptr<AudioData> audiodata) override;
 		virtual void CallPullEvents() override;
 		virtual bool CallIsRunning() override;
 	private:

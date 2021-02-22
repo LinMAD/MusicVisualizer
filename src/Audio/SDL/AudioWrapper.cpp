@@ -12,11 +12,11 @@ namespace MV {
 	void AudioWrapper::Execute()
 	{
 		std::string execMsg{ "Loading given audio file: " + m_PathToFile };
-		LOGGER_DEBUG(execMsg);
+		LOG(execMsg);
 
 		if (SDL_LoadWAV(m_PathToFile.c_str(), &m_WavSpec, &m_WavStartBuffer, &m_WavLength) == NULL)
 		{
-			LOGGER_DEBUG("Impossible to load audio file!");
+			LOG("Impossible to load audio file!");
 			throw AppException(SDL_GetError());
 		}
 
@@ -37,12 +37,12 @@ namespace MV {
 		m_Device = SDL_OpenAudioDevice(nullptr, 0, &m_WavSpec, &m_Obtained, 0);
 		if (m_Device == 0)
 		{
-			LOGGER_DEBUG("Error with audio device!");
+			LOG("Error with audio device!");
 			throw AppException(SDL_GetError());
 		}
 
 		execMsg = { "Playing audio from: " + m_PathToFile };
-		LOGGER_DEBUG(execMsg);
+		LOG(execMsg);
 
 		SDL_LockAudioDevice(m_Device);
 		m_IsPlaying = true;
@@ -51,9 +51,9 @@ namespace MV {
 		SDL_UnlockAudioDevice(m_Device);
 	}
 
-	AudioData* AudioWrapper::GetSourceAudioData()
+	std::shared_ptr<AudioData> AudioWrapper::GetSourceAudioData()
 	{
-		return m_AudioData.get();
+		return m_AudioData;
 	}
 
 	const std::string& AudioWrapper::GetFilePath()

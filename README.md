@@ -1,13 +1,6 @@
 # Music visualizer
 
 > Program allows you to play audio files with wav format and show simple audio wave "visualisation".
-
-## Development roadmap
-```
-- Fix issue with fast play for some wav files
-- Add UI components to control player (Stop/play, volume, next, prev buttons etc)
-- Update visualisation to be more relevant to audio wave, channel and frequency
-```
 ___
 
 ### Dependencies for Running Locally
@@ -33,4 +26,12 @@ ___
 
 ### Developet and tested under this platforms
 > Windows 10 x64
+
 > Debian GNU/Linux 10 (buster)
+
+## Next to develop
+```
+- Fix issue with fast play for some wav files
+- Add UI components to control player (Stop/play, volume, next, prev buttons etc)
+- Update visualisation to be more relevant to audio wave, channel and frequency
+```

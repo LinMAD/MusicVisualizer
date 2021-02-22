@@ -1,7 +1,9 @@
 .vs/
 .vscode/
 out/
-!build/.gitignore
+!build/.gitkeep
+!build/test.wav
+build/
 install/
 Debug/
 extern/SDL2/

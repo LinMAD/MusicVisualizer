@@ -62,7 +62,7 @@ namespace MV {
 		SDL_RenderClear(m_Renderer);
 	}
 
-	void RendererWrapper::CallDrawBuffer(std::shared_ptr<AudioData> audiodata)
+	void RendererWrapper::CallDrawBuffer(const AudioData* audioData)
 	{
 		if (!m_StartTime)
 			m_StartTime = (uint32_t) SDL_GetTicks();
@@ -83,7 +83,7 @@ namespace MV {
 		SDL_SetWindowTitle(m_Window, title.c_str());
 
 		// Render sound wave
-		m_Visualizer->DrawWave(audiodata, SDL_Point{ 0, WINDOW_HEIGHT / 2 }, WINDOW_WIDTH, SDL_Color{ 50, 200, 50, 255 });
+		m_Visualizer->DrawWave(audioData, SDL_Point{ 0, WINDOW_HEIGHT / 2 }, WINDOW_WIDTH, SDL_Color{ 50, 200, 50, 255 });
 
 		SDL_RenderPresent(m_Renderer);
 

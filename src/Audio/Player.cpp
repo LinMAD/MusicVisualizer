@@ -36,11 +36,11 @@ namespace MV {
 		if (needed->IsStopped()) needed->Execute();
 	}
 
-	std::shared_ptr<AudioData> Player::GetAudioData(const string& pathToFile)
+	const AudioData* Player::GetAudioData(const string& pathToFile)
 	{
 		auto needed = FindAudio(pathToFile);
 		if (needed != nullptr)
-			return needed->GetSourceAudioData();
+			return needed->GetSourceAudioData().get();
 
 		return nullptr;
 	}

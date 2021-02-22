@@ -17,7 +17,7 @@ namespace MV {
 
 		void Add(const string& pathToFile);
 		void Play(const string& pathToFile);
-		std::shared_ptr<AudioData> GetAudioData(const string& pathToFile);
+		const AudioData* GetAudioData(const string& pathToFile);
 	private:
 		AudioWrapper* FindAudio(const string& pathToFile);
 	private:

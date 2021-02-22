@@ -2,7 +2,6 @@
 #include <ctime>
 #include <iostream>
 #include <future>
-
 #include "Logger.h"
 
 using std::chrono::system_clock;

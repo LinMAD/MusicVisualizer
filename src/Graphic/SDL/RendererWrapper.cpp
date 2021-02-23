@@ -5,17 +5,16 @@
 #include "Exception/AppException.h"
 
 namespace MV {
-	RendererWrapper::RendererWrapper()
+	RendererWrapper::RendererWrapper() : 
+		m_StartTime(0), 
+		m_EndTime(0), 
+		m_Delta(0),
+		m_TimePerFrameinMilliSec(15),
+		m_Fps(60)
 	{
 		LOG("Initializing SDL components...");
 		
 		// Video
-		m_StartTime = 0;
-		m_EndTime = 0;
-		m_Delta = 0;
-		m_TimePerFrameinMilliSec = 15;
-		m_Fps = 60;
-
 		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
 		{
 			LOG("SDL could not initialize!");

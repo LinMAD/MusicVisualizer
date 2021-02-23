@@ -3,9 +3,8 @@
 #include "Exception/AppException.h"
 
 namespace MV {
-	AudioWrapper::AudioWrapper(const std::string& pathToFile)
+	AudioWrapper::AudioWrapper(const std::string& pathToFile) : m_IsPlaying(false)
 	{
-		m_IsPlaying = false;
 		m_PathToFile = pathToFile;
 	}
 

@@ -9,10 +9,7 @@ using std::chrono::system_clock;
 namespace MV {
 	shared_ptr<Log> Log::s_Instance = nullptr;
 
-	Log::Log()
-	{
-		m_IsEnabled = true;
-	}
+	Log::Log() : m_IsEnabled(true) {}
 
 	void Log::ToggleIsEnabled()
 	{

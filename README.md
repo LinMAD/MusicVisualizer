@@ -1,7 +1,20 @@
-# Music visualizer
+﻿Music visualizer
+========
 
-> Program allows you to play audio files with wav format and show simple audio wave "visualisation".
+> Program allows you to play audio file with wav format and show simple audio wave "visualisation".
 ___
+
+## Example of application window
+
+![Demo](doc/app_window.PNG)
+
+## Getting Started
+
+### Requirements
+
+! `Your machine must have access to audio device` !
+
+Docker containers or virtual machines without audio will lead to application termination.
 
 ### Dependencies for Running Locally
 * cmake >= 3.8
@@ -18,16 +31,23 @@ ___
   * Linux: gcc / g++ is installed by default on most Linux distros
   * Windows: recommend using [MinGW](http://www.mingw.org/)
 
-### Basic Build Instructions
+### Build and Run
+1. Compile: `cd build && cmake .. && make`.
+2. Run it `./MusicVisualizer -f test.wav`.
 
-1. Clone this repo.
-2. Compile: `cd build && cmake .. && make`.
-3. Run it `./MusicVisualizer -f test.wav`.
+* `test.wav` contains audio of coffe machine but you can use own sounds.
 
-### Developet and tested under this platforms
-> Windows 10 x64
-
-> Debian GNU/Linux 10 (buster)
+## Project structure
+```
+src
+├── main.cpp    // Entry point
+├── Audio       // Contains audio related implementation
+│   └── SDL
+├── Exception   // Application exceptions
+└── Graphic     // Graphic related implementation
+    └── SDL
+```
+* Project based on SDL library so concreet implementation (wrappers) must be stored inside SDL folders, for example `Graphic/SDL`.
 
 ## Next to develop
 ```
@@ -35,3 +55,11 @@ ___
 - Add UI components to control player (Stop/play, volume, next, prev buttons etc)
 - Update visualisation to be more relevant to audio wave, channel and frequency
 ```
+
+#### Developet and tested under this platforms
+- Windows 10 x64
+- Debian GNU/Linux 10 (buster)
+
+## License
+This project is licensed with the `MIT license`.
+

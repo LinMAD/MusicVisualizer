@@ -45,7 +45,7 @@ int main(int argc, char* argv[])
 	}
 
 	delete(player);
-	delete(inputFilePath);
+	//delete(inputFilePath);
 
 	return 0;
 }

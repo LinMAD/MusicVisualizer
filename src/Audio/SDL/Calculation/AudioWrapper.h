@@ -30,8 +30,8 @@ namespace MV {
 		SDL_AudioSpec m_Obtained{};
 		SDL_AudioDeviceID m_Device{};
 
-		uint8_t* m_WavStartBuffer{};
-		uint32_t m_WavLength{};
+		Uint8* m_WavStartBuffer{};
+		Uint32 m_WavLength{};
 
 		std::shared_ptr<AudioData> m_AudioData;
 	};

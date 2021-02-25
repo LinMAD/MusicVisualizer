@@ -81,7 +81,6 @@ namespace MV {
 
 		if (audio->length <= 0)
 		{
-			SDL_FreeWAV(audio->stream);
 			free(audio->stream);
 			free(audio->position);
 			return;
@@ -89,7 +88,7 @@ namespace MV {
 
         audio->stream = stream;
 
-		auto tempLength = streamLength;
+		auto tempLength = (uint32_t) streamLength;
 		tempLength = (tempLength > audio->length ? audio->length : tempLength);
 
 		SDL_MixAudioFormat(stream, audio->position, audio->format, tempLength, AUDIO_MAX_SOUNDS);
@@ -100,6 +99,7 @@ namespace MV {
 
 	void AudioWrapper::ClearResources() const
 	{
-		SDL_CloseAudioDevice(m_Device);
+        SDL_FreeWAV(m_WavStartBuffer);
+        SDL_CloseAudioDevice(m_Device);
 	}
 }

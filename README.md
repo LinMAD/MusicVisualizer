@@ -47,7 +47,6 @@ src
 
 ## Next to Develop\Fix
 ```
-- Fix issue memory leak.
 - Fix issue with fast play for some wav files
 - Add UI components to control player (Stop/play, volume, next, prev buttons etc)
 - Support Linux platform again

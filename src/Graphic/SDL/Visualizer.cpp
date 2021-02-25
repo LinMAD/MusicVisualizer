@@ -36,4 +36,5 @@ void MV::Visualizer::DrawWave(AudioData audioData, SDL_Point start, int lineWidt
 
     SDL_SetRenderDrawColor(m_Renderer, color.r, color.g, color.b, color.a);
     SDL_RenderDrawLines(m_Renderer, timePoints, AUDIO_BUFFER_SAMPLE_FRAMES);
+    delete(timePoints);
 }

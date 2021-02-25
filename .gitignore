@@ -1,9 +1,18 @@
+# IDE artifacts
 .vs/
 .vscode/
-out/
+.idea/
+
+# Build artifacts
 !build/.gitkeep
 !build/test.wav
+
+out/
 build/
 install/
 Debug/
-extern/SDL2/
+cmake-build-debug/
+
+# Dependency
+!extern/cmake/
+extern/

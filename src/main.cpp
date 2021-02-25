@@ -11,8 +11,10 @@ using namespace MV;
 char* GetCmdOption(char** begin, char** end, const std::string& option)
 {
 	char** itr = std::find(begin, end, option);
-	if (itr != end && ++itr != end) return *itr;
-	return 0;
+	if (itr != end && ++itr != end)
+	    return *itr;
+
+	return nullptr;
 }
 
 int main(int argc, char* argv[])
@@ -25,24 +27,25 @@ int main(int argc, char* argv[])
 	}
 
 	std::string filename(inputFilePath);
-	if(filename.substr(filename.find_last_of(".") + 1) != "wav")
+	if(filename.substr(filename.find_last_of('.') + 1) != "wav")
 	{
 		LOG("Given not 'wav' file");
 		return 1;
 	}
 
-	Player* player = new Player();
-	Renderer* renderer = Renderer::GetActuallRenderer();
-
+	auto* player = new Player();
 	player->Add(filename);
 
-	while (renderer->IsRunning())
+	while (MV::Renderer::IsRunning())
 	{
-		renderer->HandleEvents();
+		MV::Renderer::HandleEvents();
 		player->Play(filename);
 
-		renderer->Draw(player->GetAudioData(filename));
+		MV::Renderer::Draw(*player->GetAudioData(filename));
 	}
+
+	delete(player);
+	delete(inputFilePath);
 
 	return 0;
 }

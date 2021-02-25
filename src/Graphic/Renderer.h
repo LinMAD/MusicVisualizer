@@ -1,7 +1,8 @@
 #pragma once
 
 #include <memory>
-#include "Audio/AudioData.h"
+#include <utility>
+#include "Audio/SDL/AudioData.h"
 
 namespace MV {
 	class Renderer
@@ -12,10 +13,10 @@ namespace MV {
 			s_RendererImpl->CallPullEvents();
 		}
 
-		inline static void Draw(const AudioData* audioData)
+		inline static void Draw(AudioData audioData)
 		{
 			s_RendererImpl->CallClearScreen();
-			s_RendererImpl->CallDrawBuffer(audioData);
+			s_RendererImpl->CallDrawBuffer(std::move(audioData));
 		}
 
 		inline static bool IsRunning()
@@ -23,13 +24,13 @@ namespace MV {
 			return s_RendererImpl->CallIsRunning();
 		}
 
-		inline static Renderer* GetActuallRenderer()
+		inline static Renderer* GetActualRenderer()
 		{
 			return s_RendererImpl.get();
 		}
 	protected:
 		virtual void CallClearScreen() = 0;
-		virtual void CallDrawBuffer(const AudioData* audioData) = 0;
+		virtual void CallDrawBuffer(AudioData audioData) = 0;
 		virtual void CallPullEvents() = 0;
 		virtual bool CallIsRunning() = 0;
 	private:

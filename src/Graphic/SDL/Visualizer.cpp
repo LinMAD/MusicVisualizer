@@ -3,31 +3,37 @@
 #include "Graphic/Window.h"
 #include "Logger.h"
 
-MV::Visualizer::Visualizer(SDL_Renderer* renderer)
+MV::Visualizer::Visualizer(SDL_Renderer* renderer) : m_Multiplier(0)
 {
 	m_Renderer = renderer;
 }
 
-void MV::Visualizer::DrawWave(const AudioData* audioData, const SDL_Point& start, int lineWidth, const SDL_Color& color)
+void MV::Visualizer::DrawWave(AudioData audioData, SDL_Point start, int lineWidth, const SDL_Color& color)
 {
-	std::vector<SDL_Point> points;
+    const auto VISUAL_POWER_INDEX = 0.5;
+    const auto CONSTANT_SIZE = (float) AUDIO_BUFFER_SAMPLE_FRAMES / (float) lineWidth;
+    auto* timePoints = new SDL_Point[AUDIO_BUFFER_SAMPLE_FRAMES];
 
-    // TODO Refactor this visualisation and use calculations from FFTW
-    if (audioData->length != 0) {
-        // use smallest possible step so soundwave fills window
-        int step = (int)ceil((double) lineWidth / (double) audioData->length);
-        auto amplitude = audioData->position;
-        for (int i = 0; i < lineWidth; i += step) {
-            points.push_back(SDL_Point{ start.x + i, (int)(start.y + *amplitude) });
-            ++amplitude;
-        }
+    // Sampling audio from stream
+    for(int i=0; i < AUDIO_BUFFER_SAMPLE_FRAMES; i++)
+    {
+        m_Multiplier = VISUAL_POWER_INDEX * (1 - cos(2 * M_PI * i / AUDIO_BUFFER_SAMPLE_FRAMES));
+
+        audioData.in[i][0] = MV::AudioData::Get16bitAudioSample(audioData.position, audioData.format) * m_Multiplier;
+        audioData.in[i][1] = 0.0;
+
+        audioData.position += 2;
     }
-    else { // silence
-        points.push_back(SDL_Point{ start.x, start.y });
-        points.push_back(SDL_Point{ start.x + lineWidth, start.y });
 
+    // Create visual points
+    if (audioData.length != 0) {
+        for(int i=0; i < AUDIO_BUFFER_SAMPLE_FRAMES; i++)
+        {
+            timePoints[i].x = start.x + static_cast<int> ((float) i / CONSTANT_SIZE);
+            timePoints[i].y = static_cast<int>(start.y - audioData.in[i][0] * 70);
+        }
     }
 
     SDL_SetRenderDrawColor(m_Renderer, color.r, color.g, color.b, color.a);
-	SDL_RenderDrawLines(m_Renderer, &points[0], (int)points.size());
+    SDL_RenderDrawLines(m_Renderer, timePoints, AUDIO_BUFFER_SAMPLE_FRAMES);
 }

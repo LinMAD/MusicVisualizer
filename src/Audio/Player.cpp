@@ -10,6 +10,8 @@ namespace MV {
 	Player::~Player()
 	{
 		LOG("Cleaning audio objects from playlist...");
+        for (auto item : m_PlayList) delete(item);
+
 		m_PlayList.clear();
 	}
 
@@ -36,7 +38,7 @@ namespace MV {
 		if (needed->IsStopped()) needed->Execute();
 	}
 
-	const AudioData* Player::GetAudioData(const string& pathToFile)
+	AudioData* Player::GetAudioData(const string& pathToFile)
 	{
 		auto needed = FindAudio(pathToFile);
 		if (needed != nullptr)

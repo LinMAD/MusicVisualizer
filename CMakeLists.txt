@@ -36,6 +36,7 @@ endif ()
 # Build type
 if (CMAKE_BUILD_TYPE STREQUAL "Debug" AND WIN32)
 	file(COPY "${SDL2_ROOT}/../debug/bin/SDL2d.dll" DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+	file(COPY "${FFTW_ROOT}/../bin/fftw3.dll" DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 endif ()
 
 set(FFTW3_DIR ${FFTW_ROOT}/fftw3)
@@ -48,14 +49,14 @@ add_executable(
 		${PROJECT_NAME} "src/main.cpp"
 		"src/Exception/AppException.h"
 		"src/Graphic/Window.h"
-		"src/Audio/AudioData.h"
+		"src/Audio/SDL/AudioData.h"
 
 		"src/Logger.h" "src/Logger.cpp"
 		"src/Graphic/Renderer.h" "src/Graphic/Renderer.cpp"
 		"src/Graphic/SDL/RendererWrapper.h" "src/Graphic/SDL/RendererWrapper.cpp"
 		"src/Graphic/SDL/Visualizer.h" "src/Graphic/SDL/Visualizer.cpp"
 		"src/Audio/Player.h" "src/Audio/Player.cpp"
-		"src/Audio/SDL/AudioWrapper.h" "src/Audio/SDL/AudioWrapper.cpp"
+		"src/Audio/SDL/Calculation/AudioWrapper.h" "src/Audio/SDL/Calculation/AudioWrapper.cpp"
 )
 
 include_directories(${PROJECT_NAME} src)

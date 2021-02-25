@@ -4,7 +4,7 @@
 #include <memory>
 #include <vector>
 #include <mutex>
-#include "Audio/SDL/AudioWrapper.h"
+#include "Audio/SDL/Calculation/AudioWrapper.h"
 
 using namespace std;
 
@@ -17,7 +17,7 @@ namespace MV {
 
 		void Add(const string& pathToFile);
 		void Play(const string& pathToFile);
-		const AudioData* GetAudioData(const string& pathToFile);
+		AudioData* GetAudioData(const string& pathToFile);
 	private:
 		AudioWrapper* FindAudio(const string& pathToFile);
 	private:

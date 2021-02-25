@@ -6,7 +6,7 @@ ___
 
 ## Example of application window
 
-![Demo](doc/app_window.PNG)
+![Demo](doc/v_0_2_0.gif)
 
 ## Getting Started
 
@@ -45,11 +45,11 @@ src
 ```
 * Project based on SDL library so concrete implementation (wrappers) must be stored inside SDL folders, for example `Graphic/SDL`.
 
-## Next to develop
+## Next to Develop\Fix
 ```
+- Fix issue memory leak.
 - Fix issue with fast play for some wav files
 - Add UI components to control player (Stop/play, volume, next, prev buttons etc)
-- Update visualisation to be more relevant to audio wave, channel and frequency
 - Support Linux platform again
 ```
 

@@ -5,12 +5,12 @@
 #include "Exception/AppException.h"
 
 namespace MV {
-	RendererWrapper::RendererWrapper() : 
-		m_StartTime(0), 
-		m_EndTime(0), 
-		m_Delta(0),
-		m_TimePerFrameinMilliSec(15),
-		m_Fps(60)
+	RendererWrapper::RendererWrapper() :
+            m_StartTime(0),
+            m_EndTime(0),
+            m_Delta(0),
+            m_TimePerFrameInMilliSec(15),
+            m_Fps(60)
 	{
 		LOG("Initializing SDL components...");
 		
@@ -50,6 +50,8 @@ namespace MV {
 
 	RendererWrapper::~RendererWrapper()
 	{
+	    delete(m_Visualizer);
+
 		SDL_DestroyRenderer(m_Renderer);
 		SDL_DestroyWindow(m_Window);
 		SDL_Quit();
@@ -61,17 +63,17 @@ namespace MV {
 		SDL_RenderClear(m_Renderer);
 	}
 
-	void RendererWrapper::CallDrawBuffer(const AudioData* audioData)
+	void RendererWrapper::CallDrawBuffer(AudioData audioData)
 	{
 		if (!m_StartTime)
 			m_StartTime = (uint32_t) SDL_GetTicks();
 		else
 			m_Delta = m_EndTime - m_StartTime;
 
-		if ((short) m_Delta < m_TimePerFrameinMilliSec)
-			SDL_Delay(m_TimePerFrameinMilliSec - m_Delta);
+		if ((short) m_Delta < m_TimePerFrameInMilliSec)
+			SDL_Delay(m_TimePerFrameInMilliSec - m_Delta);
 
-		if ((short) m_Delta > m_TimePerFrameinMilliSec)
+		if ((short) m_Delta > m_TimePerFrameInMilliSec)
 			m_Fps = 1000 / m_Delta;
 
 		/*

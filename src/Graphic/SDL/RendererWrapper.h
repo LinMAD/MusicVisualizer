@@ -4,7 +4,7 @@
 #include <memory>
 #include "Graphic/Renderer.h"
 #include "Graphic/SDL/Visualizer.h"
-#include "Audio/AudioData.h"
+#include "Audio/SDL/AudioData.h"
 
 namespace MV {
 	class RendererWrapper : public Renderer
@@ -13,10 +13,10 @@ namespace MV {
 		RendererWrapper();
 		~RendererWrapper();
 	protected:
-		virtual void CallClearScreen() override;
-		virtual void CallDrawBuffer(const AudioData* audioData) override;
-		virtual void CallPullEvents() override;
-		virtual bool CallIsRunning() override;
+		void CallClearScreen() override;
+		void CallDrawBuffer(AudioData audioData) override;
+		void CallPullEvents() override;
+		bool CallIsRunning() override;
 	private:
 		SDL_Window* m_Window;
 		SDL_Renderer* m_Renderer;
@@ -27,7 +27,7 @@ namespace MV {
 		uint32_t m_StartTime;
 		uint32_t m_EndTime;
 		uint32_t m_Delta;
-		short m_TimePerFrameinMilliSec;
+		short m_TimePerFrameInMilliSec;
 		short m_Fps;
 	};
 }

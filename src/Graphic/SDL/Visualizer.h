@@ -2,17 +2,21 @@
 
 #include <SDL.h>
 #include <memory>
-#include "Audio/AudioData.h"
+#include "Audio/SDL/AudioData.h"
 
 namespace MV {
 	class Visualizer
 	{
 	public:
-		Visualizer(SDL_Renderer* renderer);
+		explicit Visualizer(SDL_Renderer* renderer);
 
-		void DrawWave(const AudioData* audioData, const SDL_Point& start, int lineWidth, const SDL_Color& color);
+		void DrawWave(AudioData audioData, SDL_Point start, int lineWidth, const SDL_Color& color);
 	private:
-		SDL_Renderer* m_Renderer;
+	    const double M_PI = 3.14159265358979323846;
+        SDL_Renderer* m_Renderer;
+
+		// Visual sound data
+        double m_Multiplier;
 	};
 }
 

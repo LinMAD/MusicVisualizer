@@ -25,6 +25,9 @@ namespace MV {
 		m_AudioData->format = AUDIO_S16;
 		m_AudioData->position = m_WavStartBuffer;
 		m_AudioData->stream = m_WavStartBuffer;
+        m_AudioData->in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * AUDIO_BUFFER_SAMPLE_FRAMES);
+        m_AudioData->out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * AUDIO_BUFFER_SAMPLE_FRAMES);
+        m_AudioData->plan = fftw_plan_dft_1d(AUDIO_BUFFER_SAMPLE_FRAMES, m_AudioData->in, m_AudioData->out, FFTW_FORWARD, FFTW_MEASURE);
 
 		m_WavSpec.freq = AUDIO_SAMPLING_FREQUENCY_RATE;
 		m_WavSpec.channels = AUDIO_CHANNEL_COUNT;
@@ -71,10 +74,11 @@ namespace MV {
 		return !m_IsPlaying;
 	}
 
-	void AudioWrapper::ForwardCallback(void* userData, Uint8* stream, int steamLenght)
+	void AudioWrapper::ForwardCallback(void* userData, Uint8* stream, int streamLength)
 	{
-		struct AudioData* audio = (struct AudioData*) userData;
-		SDL_memset(stream, 0, steamLenght);
+		auto* audio = (struct AudioData*) userData;
+        SDL_memset(stream, 0, streamLength);
+
 		if (audio->length <= 0)
 		{
 			SDL_FreeWAV(audio->stream);
@@ -83,17 +87,18 @@ namespace MV {
 			return;
 		}
 
-		uint32_t tempLength = (uint32_t) steamLenght;
-		tempLength = ((uint32_t) steamLenght > audio->length) ? audio->length : (uint32_t) steamLenght;
+        audio->stream = stream;
 
-		SDL_MixAudioFormat(audio->stream, audio->position, audio->format, tempLength, AUDIO_MAX_SOUNDS);
+		auto tempLength = streamLength;
+		tempLength = (tempLength > audio->length ? audio->length : tempLength);
+
+		SDL_MixAudioFormat(stream, audio->position, audio->format, tempLength, AUDIO_MAX_SOUNDS);
 
 		audio->position += tempLength;
 		audio->length -= tempLength;
-		audio->stream = stream;
 	}
 
-	void AudioWrapper::ClearResources()
+	void AudioWrapper::ClearResources() const
 	{
 		SDL_CloseAudioDevice(m_Device);
 	}

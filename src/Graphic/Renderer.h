@@ -8,15 +8,16 @@ namespace MV {
 	class Renderer
 	{
 	public:
-		inline static void HandleEvents()
-		{
-			s_RendererImpl->CallPullEvents();
-		}
+        inline static void Update(AudioData audioData)
+        {
+            s_RendererImpl->CallPullEvents();
+            s_RendererImpl->CallUpdateScreen(std::move(audioData));
+        }
 
-		inline static void Draw(AudioData audioData)
+		inline static void Draw()
 		{
 			s_RendererImpl->CallClearScreen();
-			s_RendererImpl->CallDrawBuffer(std::move(audioData));
+			s_RendererImpl->CallDrawBuffer();
 		}
 
 		inline static bool IsRunning()
@@ -30,7 +31,8 @@ namespace MV {
 		}
 	protected:
 		virtual void CallClearScreen() = 0;
-		virtual void CallDrawBuffer(AudioData audioData) = 0;
+		virtual void CallUpdateScreen(AudioData audioData) = 0;
+		virtual void CallDrawBuffer() = 0;
 		virtual void CallPullEvents() = 0;
 		virtual bool CallIsRunning() = 0;
 	private:

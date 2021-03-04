@@ -40,7 +40,6 @@ int main(int argc, char* argv[])
 	{
         player->Play(filename);
 		MV::Renderer::Update(*player->GetAudioData(filename));
-		MV::Renderer::Draw();
 	}
 
     LOG("Closing application...");

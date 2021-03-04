@@ -38,16 +38,13 @@ ___
 src
 ├── main.cpp    // Entry point
 ├── Audio       // Contains audio related implementation
-│   └── SDL
 ├── Exception   // Application exceptions
 └── Graphic     // Graphic related implementation
-    └── SDL
 ```
 * Project based on SDL library so concrete implementation (wrappers) must be stored inside SDL folders, for example `Graphic/SDL`.
 
 ## Next to Develop\Fix
 ```
-- Fix issue with fast play for some wav files
 - Add UI components to control player (Stop/play, volume, next, prev buttons etc)
 - Support Linux platform again
 ```

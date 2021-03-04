@@ -45,17 +45,17 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug" AND WIN32)
 endif ()
 
 add_executable(
-		${PROJECT_NAME} "src/main.cpp"
-		"src/Exception/AppException.h"
-		"src/Graphic/Window.h"
-		"src/Audio/SDL/AudioData.h"
+		${PROJECT_NAME} src/main.cpp
+		src/Exception/AppException.h
+		src/Graphic/Window.h
+		src/Audio/SDL/AudioData.h
 
-		"src/Logger.h" "src/Logger.cpp"
-		"src/Graphic/Renderer.h" "src/Graphic/Renderer.cpp"
-		"src/Graphic/SDL/RendererWrapper.h" "src/Graphic/SDL/RendererWrapper.cpp"
-		"src/Graphic/SDL/Visualizer.h" "src/Graphic/SDL/Visualizer.cpp"
-		"src/Audio/Player.h" "src/Audio/Player.cpp"
-		"src/Audio/SDL/Calculation/AudioWrapper.h" "src/Audio/SDL/Calculation/AudioWrapper.cpp"
+		src/Logger.h src/Logger.cpp
+		src/Graphic/Renderer.h src/Graphic/Renderer.cpp
+		src/Graphic/SDL/RendererWrapper.h src/Graphic/SDL/RendererWrapper.cpp
+        src/Audio/Player.h src/Audio/Player.cpp
+		src/Audio/SDL/Calculation/AudioWrapper.h src/Audio/SDL/Calculation/AudioWrapper.cpp
+        src/Graphic/Gui/Screen.cpp src/Graphic/Gui/Screen.h
 )
 include_directories(${PROJECT_NAME} src)
 

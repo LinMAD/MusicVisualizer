@@ -89,15 +89,15 @@ namespace MV {
         static int processOffset = 0;
 
         // Animate sound wave
-        if (audioData.remainingAudioLength > 0 || audioData.position == nullptr)
+        if (audioData.remainingAudioLength > 0 || audioData.currentAudioPosition == nullptr)
         {
             // Sampling audio from stream
             for(int i=0; i < AUDIO_BUFFER_SAMPLE_FRAMES; i++)
             {
                 m_AudioMultiplier = 0.5 * (1 - cos(2 * M_PI * i / AUDIO_BUFFER_SAMPLE_FRAMES));
-                audioData.in[i][0] = MV::AudioData::Get16bitAudioSample(audioData.position, audioData.format) * m_AudioMultiplier;
+                audioData.in[i][0] = MV::AudioData::Get16bitAudioSample(audioData.currentAudioPosition, audioData.format) * m_AudioMultiplier;
                 audioData.in[i][1] = 0.0;
-                audioData.position += 2;
+                audioData.currentAudioPosition += 2;
             }
 
             if (refreshTime == 0.0)
@@ -127,7 +127,7 @@ namespace MV {
         );
     }
 
-    void Screen::HandleAudioTrack(AudioData& audioData)
+    void Screen::HandleAudioTrack(AudioData& audioData) const
     {
         static float duration = 0.0f;
 

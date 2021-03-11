@@ -15,10 +15,10 @@ namespace MV {
     {
         std::string name;
         SDL_AudioFormat format;
-        SDL_AudioSpec spec;
 
-        uint8_t* stream;   // Original buffer
-        uint8_t* position; // Modified buffer
+        // Audio buffer buffer
+        uint8_t* audioStream;   // Original buffer
+        uint8_t* currentAudioPosition;
         uint32_t remainingAudioLength;
         uint32_t initialAudioLength;
 
@@ -31,6 +31,7 @@ namespace MV {
         {
             uint16_t val = 0x0;
 
+            // TODO fix bug for some files -> byteBuffer buffer can be => ""
             if(SDL_AUDIO_ISLITTLEENDIAN(format))
                 val=(uint16_t) byteBuffer[0] | ((uint16_t) byteBuffer[1] << 8);
             else

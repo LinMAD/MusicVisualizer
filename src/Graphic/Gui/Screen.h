@@ -21,7 +21,7 @@ namespace MV {
         void Draw(const std::shared_ptr<AudioData>& audioData);
     protected:
         void HandleControls();
-        void HandleAudioTrack(AudioData& audioData);
+        void HandleAudioTrack(AudioData& audioData) const;
         void HandleAudioWave(AudioData& audioData);
     protected:
         const double M_PI = 3.14159265358979323846;

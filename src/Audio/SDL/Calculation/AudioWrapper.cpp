@@ -13,7 +13,7 @@ namespace MV {
 		std::string execMsg{ "Loading given audio file: " + m_PathToFile };
 		LOG(execMsg);
 
-		if (SDL_LoadWAV(m_PathToFile.c_str(), &m_WavSpec, &m_WavStartBuffer, &m_WavLength) == NULL)
+		if (SDL_LoadWAV(m_PathToFile.c_str(), &m_WavSpec, &m_WavStartBuffer, &m_WavLength) == nullptr)
 		{
 			LOG("Impossible to load audio file!");
 			throw AppException(SDL_GetError());
@@ -23,8 +23,8 @@ namespace MV {
 		m_AudioData->name = m_PathToFile; // TODO Replace by base name or get info from file
 		m_AudioData->remainingAudioLength = m_AudioData->initialAudioLength = m_WavLength;
 		m_AudioData->format = AUDIO_S16;
-		m_AudioData->position = m_WavStartBuffer;
-		m_AudioData->stream = m_WavStartBuffer;
+		m_AudioData->currentAudioPosition = m_WavStartBuffer;
+		m_AudioData->audioStream = m_WavStartBuffer;
         m_AudioData->in = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * AUDIO_BUFFER_SAMPLE_FRAMES);
         m_AudioData->out = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * AUDIO_BUFFER_SAMPLE_FRAMES);
         m_AudioData->plan = fftw_plan_dft_1d(AUDIO_BUFFER_SAMPLE_FRAMES, m_AudioData->in, m_AudioData->out, FFTW_FORWARD, FFTW_MEASURE);
@@ -35,8 +35,6 @@ namespace MV {
 		m_WavSpec.callback = ForwardCallback;
 		m_WavSpec.userdata = m_AudioData.get();
 		m_WavSpec.format = m_AudioData->format;
-
-		m_AudioData->spec = m_WavSpec;
 
 		m_Device = SDL_OpenAudioDevice(nullptr, 0, &m_WavSpec, &m_Obtained, 0);
 		if (m_Device == 0)
@@ -81,21 +79,21 @@ namespace MV {
 		auto* audio = (struct AudioData*) userData;
         SDL_memset(stream, 0, streamLength);
 
-		if (audio->remainingAudioLength <= 0)
+		if (audio->remainingAudioLength < 0)
 		{
-			free(audio->stream);
-			free(audio->position);
+			free(audio->audioStream);
+			free(audio->currentAudioPosition);
 			return;
 		}
 
-        audio->stream = stream;
+        audio->audioStream = stream;
 
 		auto tempLength = (uint32_t) streamLength;
 		tempLength = (tempLength > audio->remainingAudioLength ? audio->remainingAudioLength : tempLength);
 
-		SDL_MixAudioFormat(stream, audio->position, audio->format, tempLength, AUDIO_MAX_SOUNDS);
+		SDL_MixAudioFormat(stream, audio->currentAudioPosition, audio->format, tempLength, AUDIO_MAX_SOUNDS);
 
-		audio->position += tempLength;
+		audio->currentAudioPosition += tempLength;
 		audio->remainingAudioLength -= tempLength;
 	}
 

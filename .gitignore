@@ -3,6 +3,9 @@
 .vscode/
 .idea/
 
+*.sln
+*.vcxproj*
+
 # Build artifacts
 !build/.gitkeep
 !build/test.wav

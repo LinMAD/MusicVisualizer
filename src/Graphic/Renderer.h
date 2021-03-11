@@ -2,22 +2,18 @@
 
 #include <memory>
 #include <utility>
-#include "Audio/SDL/AudioData.h"
+#include "Audio/Player.h"
 
 namespace MV {
 	class Renderer
 	{
 	public:
-		inline static void HandleEvents()
-		{
-			s_RendererImpl->CallPullEvents();
-		}
-
-		inline static void Draw(AudioData audioData)
-		{
-			s_RendererImpl->CallClearScreen();
-			s_RendererImpl->CallDrawBuffer(std::move(audioData));
-		}
+        inline static void Update(shared_ptr<Player::Playable> playable)
+        {
+            s_RendererImpl->CallPullEvents();
+            s_RendererImpl->CallClearScreen();
+            s_RendererImpl->CallUpdateScreen(std::move(playable));
+        }
 
 		inline static bool IsRunning()
 		{
@@ -30,7 +26,7 @@ namespace MV {
 		}
 	protected:
 		virtual void CallClearScreen() = 0;
-		virtual void CallDrawBuffer(AudioData audioData) = 0;
+		virtual void CallUpdateScreen(shared_ptr<Player::Playable> playable) = 0;
 		virtual void CallPullEvents() = 0;
 		virtual bool CallIsRunning() = 0;
 	private:

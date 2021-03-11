@@ -5,6 +5,7 @@ namespace MV {
 	Player::Player()
 	{
 		m_PlayList = {};
+		m_Playable = nullptr;
 	}
 
 	Player::~Player()
@@ -13,6 +14,7 @@ namespace MV {
         for (auto item : m_PlayList) delete(item);
 
 		m_PlayList.clear();
+        m_Playable.reset();
 	}
 
 	void Player::Add(const string& pathToFile)
@@ -33,18 +35,20 @@ namespace MV {
 			return;
 		}
 
-		// TODO Can be executed next audio file if current is done
-		// Controll loop of audio play
-		if (needed->IsStopped()) needed->Execute();
+		if (needed->IsStopped())
+        {
+            needed->Execute();
+
+            m_Playable.reset();
+            m_Playable = make_shared<Player::Playable>();
+            m_Playable->currentAudio = needed->GetSourceAudioData();
+            m_Playable->isPause = needed->IsStopped();
+        }
 	}
 
-	AudioData* Player::GetAudioData(const string& pathToFile)
+    shared_ptr<Player::Playable> Player::GetPlayable()
 	{
-		auto needed = FindAudio(pathToFile);
-		if (needed != nullptr)
-			return needed->GetSourceAudioData().get();
-
-		return nullptr;
+		return m_Playable;
 	}
 
 	AudioWrapper* Player::FindAudio(const string& pathToFile)

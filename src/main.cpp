@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
 	std::string filename(inputFilePath);
 	if(filename.substr(filename.find_last_of('.') + 1) != "wav")
 	{
-		LOG("Given not 'wav' file");
+		LOG("Given file not a 'wav' file");
 		return 1;
 	}
 
@@ -38,14 +38,12 @@ int main(int argc, char* argv[])
 
 	while (MV::Renderer::IsRunning())
 	{
-		MV::Renderer::HandleEvents();
-		player->Play(filename);
-
-		MV::Renderer::Draw(*player->GetAudioData(filename));
+        player->Play(filename);
+		MV::Renderer::Update(player->GetPlayable());
 	}
 
+    LOG("Closing application...");
 	delete(player);
-	//delete(inputFilePath);
 
 	return 0;
 }

@@ -1,10 +1,14 @@
 #pragma once
 
+#include <cstdio>
 #include <SDL.h>
+#include <GL/glew.h>
+#include <string>
 #include <memory>
+
 #include "Graphic/Renderer.h"
-#include "Graphic/SDL/Visualizer.h"
-#include "Audio/SDL/AudioData.h"
+#include "Graphic/Gui/Screen.h"
+#include "Audio/Player.h"
 
 namespace MV {
 	class RendererWrapper : public Renderer
@@ -13,14 +17,16 @@ namespace MV {
 		RendererWrapper();
 		~RendererWrapper();
 	protected:
+        void CallUpdateScreen(shared_ptr<Player::Playable> playable) override;
 		void CallClearScreen() override;
-		void CallDrawBuffer(AudioData audioData) override;
 		void CallPullEvents() override;
 		bool CallIsRunning() override;
 	private:
+        Screen* m_GuiScreen;
+	private:
 		SDL_Window* m_Window;
-		SDL_Renderer* m_Renderer;
-		Visualizer* m_Visualizer;
+        SDL_GLContext m_GlContext;
+
 	private:
 		bool m_IsRunning;
 
@@ -28,6 +34,8 @@ namespace MV {
 		uint32_t m_EndTime;
 		uint32_t m_Delta;
 		short m_TimePerFrameInMilliSec;
-		short m_Fps;
-	};
+        uint32_t m_Fps;
+
+        const char* m_GlslVersion;
+    };
 }

@@ -6,7 +6,7 @@ ___
 
 ## Example of application window
 
-![Demo](doc/v_0_2_0.gif)
+![Demo](doc/v_0_3_0.gif)
 
 ## Getting Started
 

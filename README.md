@@ -45,8 +45,11 @@ src
 
 ## Next to Develop\Fix
 ```
-- Add UI components to control player (Stop/play, volume, next, prev buttons etc)
+- Handle controls for player (Stop/play, volume, next, prev buttons etc)
+- Load multiple files as playlist
+- Handle playlist play (order and shuffle)
 - Support Linux platform again
+- Experement with Spotify API
 ```
 
 ## License

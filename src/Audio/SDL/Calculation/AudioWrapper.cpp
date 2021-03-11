@@ -99,7 +99,7 @@ namespace MV {
 
 	void AudioWrapper::ClearResources() const
 	{
-        //SDL_FreeWAV(m_WavStartBuffer);
+        SDL_FreeWAV(m_WavStartBuffer);
         SDL_CloseAudioDevice(m_Device);
 	}
 }

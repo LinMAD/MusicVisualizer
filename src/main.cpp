@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
 	while (MV::Renderer::IsRunning())
 	{
         player->Play(filename);
-		MV::Renderer::Update(*player->GetAudioData(filename));
+		MV::Renderer::Update(player->GetPlayable());
 	}
 
     LOG("Closing application...");

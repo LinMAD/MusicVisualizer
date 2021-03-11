@@ -106,7 +106,7 @@ namespace MV {
         glClear(GL_COLOR_BUFFER_BIT);
     }
 
-    void RendererWrapper::CallUpdateScreen(AudioData audioData)
+    void RendererWrapper::CallUpdateScreen(shared_ptr<Player::Playable> playable)
     {
 	    // Update window
         std::string title{ string(WINDOW_TITLE) + " FPS: " + std::to_string(m_Fps) };
@@ -123,7 +123,7 @@ namespace MV {
         if ((short) m_Delta > m_TimePerFrameInMilliSec)
             m_Fps = 1000 / m_Delta;
 
-        m_GuiScreen->Draw(audioData);
+        m_GuiScreen->Draw(playable->currentAudio);
 
         SDL_GL_SwapWindow(m_Window);
 

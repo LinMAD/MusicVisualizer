@@ -28,8 +28,11 @@ namespace MV {
         ImGui::DestroyContext();
     }
 
-    void Screen::Draw(AudioData& audioData)
+    void Screen::Draw(const std::shared_ptr<AudioData>& audioData)
     {
+        if (audioData == nullptr) return;
+
+        m_PlayingAudio = *audioData;
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplSDL2_NewFrame(m_Window);
         ImGui::NewFrame();
@@ -38,7 +41,7 @@ namespace MV {
         static ImVec2 screenPos = ImVec2(0, 0);
         auto screenFlags = (
             ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse
-            | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoDecoration
+            | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMouseInputs
         );
 
         ImGui::Begin("Player screen", &m_IsPlayerWindowVisible, screenFlags); // TODO Add track name
@@ -46,8 +49,8 @@ namespace MV {
         ImGui::SetWindowPos(screenPos);
         ImGui::GetStyle().WindowRounding = 0.0f;
 
-        HandleAudioTrack();
-        HandleAudioWave(audioData);
+        HandleAudioTrack(m_PlayingAudio);
+        HandleAudioWave(m_PlayingAudio);
         HandleControls();
 
         ImGui::End();
@@ -79,25 +82,26 @@ namespace MV {
         ImGui::SameLine();
     }
 
-    void Screen::HandleAudioWave(AudioData audioData)
+    void Screen::HandleAudioWave(AudioData& audioData)
     {
-        // Sampling audio from stream
-        for(int i=0; i < AUDIO_BUFFER_SAMPLE_FRAMES; i++)
-        {
-            m_AudioMultiplier = 0.5 * (1 - cos(2 * M_PI * i / AUDIO_BUFFER_SAMPLE_FRAMES));
-            audioData.in[i][0] = MV::AudioData::Get16bitAudioSample(audioData.position, audioData.format) * m_AudioMultiplier;
-            audioData.in[i][1] = 0.0;
-            audioData.position += 2;
-        }
-
         static float audioProcess[90] = {};
         static double refreshTime = 0.0;
         static int processOffset = 0;
 
         // Animate sound wave
-        if (audioData.length != 0)
+        if (audioData.length > 0 || audioData.position == nullptr)
         {
-            if (refreshTime == 0.0) refreshTime = ImGui::GetTime();
+            // Sampling audio from stream
+            for(int i=0; i < AUDIO_BUFFER_SAMPLE_FRAMES; i++)
+            {
+                m_AudioMultiplier = 0.5 * (1 - cos(2 * M_PI * i / AUDIO_BUFFER_SAMPLE_FRAMES));
+                audioData.in[i][0] = MV::AudioData::Get16bitAudioSample(audioData.position, audioData.format) * m_AudioMultiplier;
+                audioData.in[i][1] = 0.0;
+                audioData.position += 2;
+            }
+
+            if (refreshTime == 0.0)
+                refreshTime = ImGui::GetTime();
 
             while (refreshTime < ImGui::GetTime())
             {
@@ -123,7 +127,7 @@ namespace MV {
         );
     }
 
-    void Screen::HandleAudioTrack()
+    void Screen::HandleAudioTrack(AudioData& audioData)
     {
         static float track = 0.0f, audioTrackDir = 1.0f;
 
@@ -141,7 +145,7 @@ namespace MV {
             audioTrackDir *= -1.0f;
         }
 
-        ImGui::Text("Track: Foo bar");
+        ImGui::Text("%s", audioData.name.c_str());
         ImGui::ProgressBar(track, ImVec2(MAX_LENGTH, 0.0f));
     }
 }

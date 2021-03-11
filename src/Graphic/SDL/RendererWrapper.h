@@ -8,7 +8,7 @@
 
 #include "Graphic/Renderer.h"
 #include "Graphic/Gui/Screen.h"
-#include "Audio/SDL/AudioData.h"
+#include "Audio/Player.h"
 
 namespace MV {
 	class RendererWrapper : public Renderer
@@ -17,7 +17,7 @@ namespace MV {
 		RendererWrapper();
 		~RendererWrapper();
 	protected:
-        void CallUpdateScreen(AudioData audioData) override;
+        void CallUpdateScreen(shared_ptr<Player::Playable> playable) override;
 		void CallClearScreen() override;
 		void CallPullEvents() override;
 		bool CallIsRunning() override;

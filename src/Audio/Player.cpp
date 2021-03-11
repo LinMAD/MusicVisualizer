@@ -35,7 +35,6 @@ namespace MV {
 			return;
 		}
 
-		// Control loop of audio play
 		if (needed->IsStopped())
         {
             needed->Execute();

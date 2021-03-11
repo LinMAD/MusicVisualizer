@@ -15,10 +15,12 @@ namespace MV {
     {
         std::string name;
         SDL_AudioFormat format;
+        SDL_AudioSpec spec;
 
         uint8_t* stream;   // Original buffer
         uint8_t* position; // Modified buffer
-        uint32_t length;
+        uint32_t remainingAudioLength;
+        uint32_t initialAudioLength;
 
         // Audio analysis
         fftw_plan plan;

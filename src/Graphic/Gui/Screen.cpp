@@ -41,7 +41,7 @@ namespace MV {
         static ImVec2 screenPos = ImVec2(0, 0);
         auto screenFlags = (
             ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse
-            | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMouseInputs
+            | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoDecoration
         );
 
         ImGui::Begin("Player screen", &m_IsPlayerWindowVisible, screenFlags); // TODO Add track name
@@ -89,7 +89,7 @@ namespace MV {
         static int processOffset = 0;
 
         // Animate sound wave
-        if (audioData.length > 0 || audioData.position == nullptr)
+        if (audioData.remainingAudioLength > 0 || audioData.position == nullptr)
         {
             // Sampling audio from stream
             for(int i=0; i < AUDIO_BUFFER_SAMPLE_FRAMES; i++)
@@ -129,23 +129,11 @@ namespace MV {
 
     void Screen::HandleAudioTrack(AudioData& audioData)
     {
-        static float track = 0.0f, audioTrackDir = 1.0f;
+        static float duration = 0.0f;
 
-        // Animate a simple progress bar
-        track += audioTrackDir * 0.4f * ImGui::GetIO().DeltaTime;
-        if (track >= +1.1f)
-        {
-            track = +1.1f;
-            audioTrackDir *= -1.0f;
-        }
+        duration = (float) (audioData.initialAudioLength - audioData.remainingAudioLength) / (float) audioData.initialAudioLength;
 
-        if (track <= -0.1f)
-        {
-            track = -0.1f;
-            audioTrackDir *= -1.0f;
-        }
-
-        ImGui::Text("%s", audioData.name.c_str());
-        ImGui::ProgressBar(track, ImVec2(MAX_LENGTH, 0.0f));
+        ImGui::Text("Playing: %s", audioData.name.c_str());
+        ImGui::ProgressBar(duration, ImVec2(MAX_LENGTH, 0.0f));
     }
 }

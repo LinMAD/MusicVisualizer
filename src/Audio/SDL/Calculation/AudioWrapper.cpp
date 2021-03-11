@@ -21,7 +21,7 @@ namespace MV {
 
 		m_AudioData = std::make_shared<AudioData>();
 		m_AudioData->name = m_PathToFile; // TODO Replace by base name or get info from file
-		m_AudioData->length = m_WavLength;
+		m_AudioData->remainingAudioLength = m_AudioData->initialAudioLength = m_WavLength;
 		m_AudioData->format = AUDIO_S16;
 		m_AudioData->position = m_WavStartBuffer;
 		m_AudioData->stream = m_WavStartBuffer;
@@ -35,6 +35,8 @@ namespace MV {
 		m_WavSpec.callback = ForwardCallback;
 		m_WavSpec.userdata = m_AudioData.get();
 		m_WavSpec.format = m_AudioData->format;
+
+		m_AudioData->spec = m_WavSpec;
 
 		m_Device = SDL_OpenAudioDevice(nullptr, 0, &m_WavSpec, &m_Obtained, 0);
 		if (m_Device == 0)
@@ -65,7 +67,7 @@ namespace MV {
 
 	bool AudioWrapper::IsStopped()
 	{
-		if (m_IsPlaying && m_AudioData->length == 0)
+		if (m_IsPlaying && m_AudioData->remainingAudioLength == 0)
 		{
 			m_IsPlaying = false;
 			ClearResources();
@@ -79,7 +81,7 @@ namespace MV {
 		auto* audio = (struct AudioData*) userData;
         SDL_memset(stream, 0, streamLength);
 
-		if (audio->length <= 0)
+		if (audio->remainingAudioLength <= 0)
 		{
 			free(audio->stream);
 			free(audio->position);
@@ -89,12 +91,12 @@ namespace MV {
         audio->stream = stream;
 
 		auto tempLength = (uint32_t) streamLength;
-		tempLength = (tempLength > audio->length ? audio->length : tempLength);
+		tempLength = (tempLength > audio->remainingAudioLength ? audio->remainingAudioLength : tempLength);
 
 		SDL_MixAudioFormat(stream, audio->position, audio->format, tempLength, AUDIO_MAX_SOUNDS);
 
 		audio->position += tempLength;
-		audio->length -= tempLength;
+		audio->remainingAudioLength -= tempLength;
 	}
 
 	void AudioWrapper::ClearResources() const

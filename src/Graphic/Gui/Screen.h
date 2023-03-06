@@ -3,8 +3,9 @@
 #include <memory>
 
 #include <imgui.h>
-#include <imgui_impl_sdl.h>
+#include <imgui_impl_sdl2.h>
 #include <imgui_impl_opengl3.h>
+#include <corecrt_math_defines.h>
 #include <SDL.h>
 #include <GL/glew.h>
 
@@ -24,7 +25,6 @@ namespace MV {
         void HandleAudioTrack(AudioData& audioData) const;
         void HandleAudioWave(AudioData& audioData);
     protected:
-        const double M_PI = 3.14159265358979323846;
         const float MAX_LENGTH = 262.0f;
         const int AUDIO_WAVE_VISUAL_POWER_INDEX = 4;
         const float AUDIO_WAVE_CONSTANT_SIZE = (float) AUDIO_BUFFER_SAMPLE_FRAMES / (float) WINDOW_WIDTH;

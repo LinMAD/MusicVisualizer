@@ -1,12 +1,18 @@
 ﻿Music visualizer
 ========
 
-> Program allows you to play audio file with wav format and show simple audio wave "visualisation".
+> Simple and light media player for streaming services like Spotify.
+
+* WIP 
+  - Right now - Supported only WAV file
+  - To develop 
+    - Integrate Spotify 
+    - Controls (Stop, Play, Switch\Select, Volume)
 ___
 
 ## Example of application window
 
-![Demo](doc/v_0_3_0.gif)
+![Demo](doc/history/v_0_3_0.gif)
 
 ## Getting Started
 
@@ -26,12 +32,15 @@ ___
   * For all platforms: [Download dependency tool](https://github.com/microsoft/vcpkg)
 
 ### Build and Run
-0. Get `SDL2` and `FFTW3`.
-1. Compile: `cd build && cmake .. && make`.
-2. Run it `./MusicVisualizer -f test.wav`.
+All dependencies via [vcpkg.json](https://vcpkg.io/en/index.html) and managed in [vcpkg.json](vcpkg.json)
 
-* `test.wav` contains audio of coffee machine but you can use own sounds.
-* `VS code\studio` set your `VCPKG_ROOT` in `CMakeSettings.json` to find libraries.
+1. Open your editor like VS Code\Studio or CLion.
+2. Depending on your setup, configure needed tools.
+3. Compile
+4. Run from CMD  `./MusicVisualizer -f test.wav` or `.\MusicVisualizer.exe -f .\test.wav`
+
+A: `VS code\studio` set your `VCPKG_ROOT` in `CMakeSettings.json` to find libraries.
+B: `CLion` in Build #CL-231.7864.77 have support of `VCPKG`
 
 ## Project structure
 ```
@@ -43,14 +52,7 @@ src
 ```
 * Project based on SDL library so concrete implementation (wrappers) must be stored inside SDL folders, for example `Graphic/SDL`.
 
-## Next to Develop\Fix
-```
-- Handle controls for player (Stop/play, volume, next, prev buttons etc)
-- Load multiple files as playlist
-- Handle playlist play (order and shuffle)
-- Support Linux platform again
-- Experement with Spotify API
-```
+# TODO Rename project
 
 ## License
 This project is licensed with the `MIT license`.
